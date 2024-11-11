@@ -1,5 +1,7 @@
+// 求二叉树高度
 #include<iostream>
 #include <stack>
+#include <queue>
 
 using namespace std;
 typedef struct treenode{
@@ -22,18 +24,10 @@ void buildtree(tree &t)
         buildtree(t->right);
     }
 }
-int count = 0;
-// 统计二叉树中叶子节点值等于x的节点数目
-int get_node_count_x(treenode *root,char x){
-    if(root == NULL) return 0;
-    if(root->right==NULL && root->left==NULL && root->data==x) return count+=1;
-    get_node_count_x(root->left,x);
-    get_node_count_x(root->right,x);
-    return 0;
-}
-int main(){
-    tree t;
-    buildtree(t);
-     cout <<get_node_count_x(t,'B');
-    return 0;
+// 算法思想：其实就是左子树的高度和右子树的高度的最大值+1 递归的计算出左右子树的高度，然后最大值1
+int get_height(tree &t){
+    if(t==NULL) return 0;
+    int l_height= get_height(t->left);
+    int r_height= get_height(t->right);
+    return max(l_height,r_height)+1;
 }

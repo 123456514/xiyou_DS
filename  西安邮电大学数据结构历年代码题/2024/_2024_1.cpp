@@ -1,4 +1,4 @@
-//// 设计算法实现将单链表l中的第i个节点开始的len 个节点删除
+// 设计算法实现将单链表l中的第i个节点开始的len 个节点删除
 #include<iostream>
 using namespace std;
 int n = 5;
@@ -58,15 +58,12 @@ void delete_list(linklist &l,int i,int len)
         cout<<"删除失败"<<endl;
     }
     lnode *r = l,*q,*p=l->next;
-    while(p)
-    {
-        for(int k = 1;k<i;k++)
-        {
+    while(p){
+        for(int k = 1;k<i;k++){
             r=p;
             p=p->next;
         }
-        while(len != 0)
-        {
+        while(len != 0){
             q=p;
             p=p->next;
             free(q);

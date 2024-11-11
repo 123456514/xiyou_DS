@@ -1,6 +1,5 @@
+// 后序遍历逆序序列
 #include<iostream>
-#include <stack>
-
 using namespace std;
 typedef struct treenode{
     char data;
@@ -22,18 +21,16 @@ void buildtree(tree &t)
         buildtree(t->right);
     }
 }
-int count = 0;
-// 统计二叉树中叶子节点值等于x的节点数目
-int get_node_count_x(treenode *root,char x){
-    if(root == NULL) return 0;
-    if(root->right==NULL && root->left==NULL && root->data==x) return count+=1;
-    get_node_count_x(root->left,x);
-    get_node_count_x(root->right,x);
-    return 0;
+void behand_order_reverse(treenode *root){
+    if(root==NULL) return;
+    behand_order_reverse(root->right);
+    behand_order_reverse(root->left);
+    cout<<root->data;
 }
 int main(){
     tree t;
     buildtree(t);
-     cout <<get_node_count_x(t,'B');
+    behand_order_reverse(t);
     return 0;
 }
+

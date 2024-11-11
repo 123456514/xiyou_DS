@@ -33,21 +33,16 @@ void disp(linklist &l)
     }
     cout<<endl;
 }
-void  conbine(linklist &l1,linklist &l2)
-{
+void  conbine(linklist &l1,linklist &l2){
     lnode *p1=l1->next,*p2=l2->next,*r=l1,*q,*s,*k;
-    while(p1)
-    {
-        if(p1->data>=l2->next->data)
-        {
+    while(p1){
+        if(p1->data>=l2->next->data){
            q=p1->next;
            p1->next=l2->next;
            l2->next=p1;
            r->next=q;
            p1=q;
-        }
-        else
-        {
+        }else{
             q=l2;
             p2=l2->next;
             while(p2->data>p1->data){

@@ -1,5 +1,5 @@
+// 二叉树 统计度为2的节点
 #include<iostream>
-#include <stack>
 
 using namespace std;
 typedef struct treenode{
@@ -22,18 +22,17 @@ void buildtree(tree &t)
         buildtree(t->right);
     }
 }
-int count = 0;
-// 统计二叉树中叶子节点值等于x的节点数目
-int get_node_count_x(treenode *root,char x){
+int count;
+int get_node_count_two(treenode *root){
     if(root == NULL) return 0;
-    if(root->right==NULL && root->left==NULL && root->data==x) return count+=1;
-    get_node_count_x(root->left,x);
-    get_node_count_x(root->right,x);
+    if(root->right!=NULL && root->left!=NULL) return count+=1;
+    get_node_count_two(root->left);
+    get_node_count_two(root->right);
     return 0;
 }
 int main(){
     tree t;
     buildtree(t);
-     cout <<get_node_count_x(t,'B');
+    cout<<get_node_count_two(t);
     return 0;
 }

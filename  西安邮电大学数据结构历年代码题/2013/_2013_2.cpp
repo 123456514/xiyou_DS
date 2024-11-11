@@ -1,1 +1,65 @@
-// å®Œæˆæ ˆå­˜å‚¨ç»“æ„çš„å®šä¹‰ï¼Œç¼–å†™å®ç° å…¥æ ˆå’Œå‡ºæ ˆçš„å‡½æ•°
+// Íê³ÉÕ»´æ´¢½á¹¹µÄ¶¨Òå£¬±àĞ´ÊµÏÖ ÈëÕ»ºÍ³öÕ»µÄº¯Êı
+#include<iostream>
+using namespace std;
+#define Max 5
+typedef struct {
+    int nums[Max];
+    int top;
+}seqStack;
+void initial(seqStack &s){
+    s.top = -1; // ³õÊ¼»¯£¬Õ»Îª¿ÕµÄÊ±ºò£¬Õ»¶¥Ö¸Õë¼ÇÎª-1
+}
+bool is_full(seqStack &s){ // ÅĞ¶ÏÕ»ÊÇ·ñÂú
+    if(s.top == Max-1){
+        cout << "Õ»ÂúÁË";
+        return true;
+    }
+    return false;
+}
+bool is_empty_s(seqStack &s){
+    if(s.top == -1){
+        cout << "Õ»¿Õ";
+        return true;
+    }
+    return false;
+}
+// ÈëÕ»
+bool Push(seqStack &s,int x){
+    if(!is_full(s)){
+        s.nums[++s.top]=x;
+        return true;
+    }else{
+        return false;
+    }
+}
+// ³öÕ»
+bool Pop(seqStack &s,int &x){
+    if(!is_empty_s(s)){
+        x=s.nums[s.top];
+        s.top--;
+        return true;
+    }else{
+        return false;
+    }
+}
+
+int main(){
+    seqStack s;
+    initial(s);
+    int x;
+    Push(s,1);
+    Pop(s,x);
+    cout<<x<<endl;
+    Push(s,2);
+    Pop(s,x);
+    cout<<x<<endl;
+    Push(s,3);
+    Push(s,4);
+    Push(s,5);
+    Push(s,1);
+    Push(s,1);
+    Push(s,1);
+    Push(s,1);
+    Push(s,1);
+    Push(s,1);
+}
