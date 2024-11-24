@@ -1,1 +1,83 @@
-// å›¾ mdæ–‡æ¡£
+// Í¼ mdÎÄµµ
+#include <iostream>
+#include <vector>
+#include <cstring>
+using namespace std;
+
+// ¶¨ÒåÍ¼½á¹¹Ìå£¨¼òµ¥Ê¾Òâ£¬¸ù¾İÊµ¼ÊÇé¿öÍêÉÆ£©
+struct Graph {
+    int vexnum;  // ¶¥µã¸öÊı
+    vector<int> *adj;  // ÁÚ½Ó±í
+};
+
+// »ñÈ¡¶¥µãvµÄµÚÒ»¸öÁÚ½Ó¶¥µã£¬·µ»Ø¶¥µã±àºÅ£¬ÈôÃ»ÓĞÔò·µ»Ø -1
+int FirstAdjVertex(Graph g, int v) {
+    if (g.adj[v].size() > 0) {
+        return g.adj[v][0];
+    }
+    return -1;
+}
+
+// »ñÈ¡¶¥µãwÔÚÆäÁÚ½Ó±íÖĞµÄÏÂÒ»¸öÁÚ½Ó¶¥µã£¬·µ»Ø¶¥µã±àºÅ£¬ÈôÃ»ÓĞÔò·µ»Ø -1
+int NextAdjVertex(Graph g, int w) {
+    // ÕâÀï¼ÙÉèÄãÓĞºÏÊÊµÄ·½Ê½»ñÈ¡ÏÂÒ»¸öÁÚ½Ó¶¥µã£¬Ê¾ÀıÖĞ¼òµ¥·µ»Ø -1
+    return -1;
+}
+// Éî¶ÈÓÅÏÈËÑË÷º¯Êı
+void dfs(Graph g, int v0, int &Vnum, int &Enum, int visited[]) {
+    cout << "·ÃÎÊ¶¥µã: " << v0 << endl;  // ¼òµ¥Êä³ö±íÊ¾·ÃÎÊÁË¸Ã¶¥µã£¬¿É¸ù¾İĞèÇó¸Ä
+    visited[v0] = true;  // ±ê¼ÇÊı×éÖĞ v0Îªtrue ±íÊ¾¸Ã¶¥µãÒÑ¾­±»·ÃÎÊ¹ıÁË
+    Vnum++;
+    int w = FirstAdjVertex(g, v0);  // ÔÚÁÚ½Ó±íÖĞ·ÃÎÊ´ËÊ±v0ËùÔÚµÄÁÚ½Ó±íĞĞÊıµÄÏÂÒ»¸ö¶¥µãµÄÊıÖµ
+    while (w!= -1) {
+        if (w > v0) {  // ¼òµ¥·½Ê½±ÜÃâÖØ¸´Í³¼ÆÍ¬Ò»Ìõ±ß£¨ÎŞÏòÍ¼±ß»áÖØ¸´³öÏÖ£©
+            Enum++;
+        }
+        if (!visited[w]) {  // Èç¹ûÕâ¸ö¶¥µãÃ»ÓĞ±»·ÃÎÊ£¬ÄÇÃ´¾Í½øĞĞµİ¹é
+            dfs(g, w, Vnum, Enum, visited);
+        }
+        w = NextAdjVertex(g, w);  // ½øÈëÕâÒ»ĞĞÊı¾İÖĞµÄÏÂÒ»¸ö¶¥µã¡£
+    }
+}
+
+// ÅĞ¶ÏÍ¼ÊÇ·ñÎªÊ÷
+int isTree(Graph &g) {
+    int Vnum = 0;  // ±íÊ¾µÄÊÇ¶¥µãµÄ¸öÊı
+    int Enum = 0;  // ±íÊ¾µÄÊÇ±ßµÄ¸öÊı
+    bool visited[g.vexnum];
+    memset(visited, 0, sizeof(visited));
+    // Ñ¡Ôñ¶¥µã0×÷ÎªÆğÊ¼¶¥µã½øĞĞÉî¶ÈÓÅÏÈËÑË÷£¬¿É¸ù¾İÊµ¼Êµ÷Õû
+    dfs(g, 0, Vnum, Enum, visited);
+    // Èç¹û¶¥µãÊıÄ¿ÏàÍ¬²¢ÇÒ±ßµÄÌõÊıµÈÓÚ¶¥µãÊı - 1
+    if (Vnum == g.vexnum && Enum == g.vexnum - 1) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+
+int main() {
+    Graph g;
+    g.vexnum = 5;
+    g.adj = new vector<int>[g.vexnum];
+    // ÕâÀï¼ÙÉèÊÖ¶¯Ìí¼ÓÒ»Ğ©±ßÀ´¹¹½¨Í¼Ê¾Àı£¬Êµ¼Ê¸ù¾İĞèÇóÍêÉÆ±ßµÄÌí¼ÓÂß¼­
+    g.adj[0].push_back(1);
+    g.adj[0].push_back(2);
+    g.adj[1].push_back(0);
+    g.adj[1].push_back(3);
+    g.adj[2].push_back(0);
+    g.adj[2].push_back(4);
+    g.adj[3].push_back(1);
+    g.adj[4].push_back(2);
+
+    int result = isTree(g);
+    if (result == 1) {
+        cout << "¸ÃÍ¼ÊÇÒ»¿ÃÊ÷" << endl;
+    } else {
+        cout << "¸ÃÍ¼²»ÊÇÒ»¿ÃÊ÷" << endl;
+    }
+
+    delete[] g.adj;
+    return 0;
+}

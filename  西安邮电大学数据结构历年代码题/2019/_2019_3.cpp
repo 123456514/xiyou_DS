@@ -18,6 +18,9 @@ bool enterQueue(SeQueue &Q,int x){
         cout<<"队列满了"<<endl;
         return false;
     }
+    if(Q.count == MaxSize){
+        cout <<"队列满了"<<endl;
+    }
     Q.rear=(Q.rear+1)%MaxSize;
     Q.data[Q.rear]=x;
     Q.count++;
@@ -26,8 +29,11 @@ bool enterQueue(SeQueue &Q,int x){
 // 出队
 bool pollQueue(SeQueue &Q,int &x){
     // 判空
+    if(Q.count == 0){
+        cout << "队列为空"<<endl;
+    }
     int front=(Q.rear+1+MaxSize-Q.count)%MaxSize;
-    if((Q.rear+1)%MaxSize==front) return false;
+    if((Q.rear+1)%MaxSize==front) return false; // 判断队列为空
     x=Q.data[front];
     Q.count--;
     return true;

@@ -13,7 +13,7 @@ void initial(SeQueue &Q){
     Q.count=0;
 }
 bool enterQueue(SeQueue &Q,int x){
-    if((Q.rear+2)%MaxSize==Q.front||Q.count==MaxSize) {
+    if((Q.rear+2)%MaxSize==Q.front) {
         cout<<"队列满了"<<endl;
         return false;
     }
@@ -23,7 +23,7 @@ bool enterQueue(SeQueue &Q,int x){
     return true;
 }
 bool pollQueue(SeQueue &Q,int &x){
-    if((Q.rear+1)%MaxSize==Q.front||Q.count==0){
+    if((Q.rear+1)%MaxSize==Q.front){
         cout<<"队列为空"<<endl;
         return false;
     } 
@@ -44,23 +44,24 @@ int main(){
     enterQueue(Q,7);
     enterQueue(Q,8);
     enterQueue(Q,9);
+    enterQueue(Q,9);
     int x=0;
-    pollQueue(Q,x);
-    cout<<x<<" ";
-    pollQueue(Q,x);
-    cout<<x<<" ";
-    pollQueue(Q,x);
-    cout<<x<<" ";
-    pollQueue(Q,x);
-    cout<<x<<" ";
-    pollQueue(Q,x);
-    cout<<x<<" ";
-    pollQueue(Q,x);
-    cout<<x<<" ";
-    pollQueue(Q,x);
-    cout<<x<<" ";
-    pollQueue(Q,x);
-    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
+//    pollQueue(Q,x);
+//    cout<<x<<" ";
     pollQueue(Q,x);
     cout<<x<<" ";
 }

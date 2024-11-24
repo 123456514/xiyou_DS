@@ -1,45 +1,50 @@
-// åˆ¤æ–­ä¸€é¢—äºŒå‰æ ‘æ˜¯å¦æ˜¯äºŒå‰æ’åºæ ‘
-#include<iostream>
-using namespace std;
-// åˆ›å»ºäºŒå‰æ ‘
-#define Max 10;
-bool isBST=true;
-char temp='A';
-typedef struct treenode{
-    char data;
-    struct treenode *lchild,*rchild;
-}treenode,*tree;
-// åˆ›å»ºäºŒå‰æ ‘
-void buildtree(tree &t)
-{
-    char ch;
-    ch=getchar();
-    if(ch=='#') t=NULL;
-    else
-    {
-        t=(treenode *)malloc(sizeof(treenode));
-        t->data=ch;
-        t->lchild=NULL;
-        t->rchild=NULL;
-        buildtree(t->lchild);
-        buildtree(t->rchild);
+#include <iostream>
+
+// ¶¨Òå¶ş²æÊ÷½Úµã½á¹¹Ìå
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+// ¸¨Öúº¯Êı£¬ÓÃÓÚÖĞĞò±éÀú²¢¼ì²é½ÚµãÖµÊÇ·ñÓĞĞòµİÔö
+bool helper(TreeNode* root, TreeNode*& prev) {
+    if (root == NULL) {
+        return true;
     }
-}
-// åˆ¤æ–­ä¸€æ£µæ ‘æ˜¯å¦æ˜¯äºŒå‰æ’åºæ ‘
-void is_BST(tree &t){
-    if(t==NULL) return;
-    //ä¸­åºéå†äºŒå‰æ ‘ï¼Œå¹¶ä¸”åœ¨éå†çš„è¿‡ç¨‹ä¸­ä¿è¯æ˜¯ä¾æ¬¡ä¸Šå‡çš„
-    is_BST(t->lchild);
-    if(t->data>=temp){
-        temp=t->data;
-    }else{
-        isBST=false;
+    // µİ¹é±éÀú×ó×ÓÊ÷
+    if (!helper(root->left, prev)) {
+        return false;
     }
-    is_BST(t->rchild);
+    // ¼ì²éµ±Ç°½ÚµãÖµÊÇ·ñ´óÓÚÖĞĞò±éÀúµÄÇ°Ò»¸ö½ÚµãÖµ
+    if (prev!= NULL && root->val <= prev->val) {
+        return false;
+    }
+    prev = root;
+    // µİ¹é±éÀúÓÒ×ÓÊ÷
+    return helper(root->right, prev);
 }
-int main(){
-    tree t;
-    buildtree(t);
-    is_BST(t);
-    cout << isBST<<endl;
+
+// Ö÷º¯Êı£¬ÅĞ¶Ï¶ş²æÊ÷ÊÇ·ñÎª¶ş²æÅÅĞòÊ÷
+bool isValidBST(TreeNode* root) {
+    TreeNode* prev = NULL;
+    return helper(root, prev);
+}
+
+int main() {
+    TreeNode* root = new TreeNode(5);
+    root->left = new TreeNode(3);
+    root->left->left = new TreeNode(2);
+    root->left->right = new TreeNode(4);
+    root->right = new TreeNode(7);
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(8);
+
+    if (isValidBST(root)) {
+        std::cout << "¸Ã¶ş²æÊ÷ÊÇ¶ş²æÅÅĞòÊ÷" << std::endl;
+    } else {
+        std::cout << "¸Ã¶ş²æÊ÷²»ÊÇ¶ş²æÅÅĞòÊ÷" << std::endl;
+    }
+    return 0;
 }
