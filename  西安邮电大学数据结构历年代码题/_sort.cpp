@@ -21,7 +21,7 @@ void insertSort(int arr[],int n){
     }
 }
 void disp(int arr[]){
-    for(int i=0;i<8;i++){
+    for(int i=0;i<6;i++){
         cout<<arr[i]<<" ";
     }
     cout<<endl;
@@ -72,7 +72,9 @@ void quicksort(int arr[],int left,int right){
     }
     int part=getPart(arr,left,right);
     quicksort(arr,left,part-1);
+    disp(arr);
     quicksort(arr,part+1,right);
+    disp(arr);
 }
 //堆排序
 //选择排序
@@ -107,11 +109,11 @@ void margeSort(int nums[],int left,int right){
 }
 //基数排序
 int main(){
-    int arr[]={9,8,7,6,5,4,3,12};
+    int arr[]={8,9,7,15,20,-1,4};
     //insertSort(arr,8); //快速排序
     //do_shallSort(arr,8); // 希尔排序
     //margeSort(arr,0,7); // 归并排序
-    quicksort(arr,0,7);
+    quicksort(arr,0,6);
     disp(arr);
     return 0;
 }

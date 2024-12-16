@@ -1,3 +1,103 @@
-// ç¼–å†™ç®—æ³•ï¼Œå®ç°ä»¥å­—ç¬¦ä¸²å½¢å¼è¾“å…¥çš„ç®€å•è¡¨è¾¾å¼æ±‚å€¼ï¼Œè¡¨è¾¾å¼çš„è¿ç®—ç¬¦ä»…æœ‰+-*/%äº”ç§ï¼Œå¹¶ä¸”å·²çŸ¥å‡½æ•° float getValue(char ch[],int start)
-// èƒ½è¿”å›å­—ç¬¦ä¸²ä»startä½ç½®è€ƒè¯•çš„ç¬¬ä¸€ä¸ªæ•°å­—ã€‚
-// ï¼›ä¾‹å¦‚ ch="1.2+3.4*5.6+7.8",åˆ™getValue(ch,1),è¿”å›çš„å€¼æ˜¯1.2ï¼ŒgetValue(ch,5),è¿”å›çš„å€¼æ˜¯3.4
+// ±àĞ´Ëã·¨£¬ÊµÏÖÒÔ×Ö·û´®ĞÎÊ½ÊäÈëµÄ¼òµ¥±í´ïÊ½ÇóÖµ£¬±í´ïÊ½µÄÔËËã·û½öÓĞ+-*/%ÎåÖÖ£¬²¢ÇÒÒÑÖªº¯Êı float getValue(char ch[],int start)
+// ÄÜ·µ»Ø×Ö·û´®´ÓstartÎ»ÖÃ¿¼ÊÔµÄµÚÒ»¸öÊı×Ö¡£
+// £»ÀıÈç ch="1.2+3.4*5.6+7.8",ÔògetValue(ch,1),·µ»ØµÄÖµÊÇ1.2£¬getValue(ch,5),·µ»ØµÄÖµÊÇ3.4
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+// ÄÜ·µ»Ø×Ö·û´®´ÓstartÎ»ÖÃ¿ªÊ¼µÄµÚÒ»¸öÊı×Ö
+float getValue(char ch[], int start) {
+    int len = strlen(ch);
+    int i = start;
+    int dot_count = 0;  // ÓÃÓÚ¼ÇÂ¼Ğ¡Êıµã³öÏÖµÄ´ÎÊı
+    int sign = 1;  // ÓÃÓÚ¼ÇÂ¼Êı×ÖµÄ·ûºÅ£¬1±íÊ¾Õı£¬-1±íÊ¾¸º
+    float num = 0;  // ÓÃÓÚ´æ´¢×îÖÕ½âÎö³öÀ´µÄÊı×Ö
+    float decimal = 1;  // ÓÃÓÚ´¦ÀíĞ¡Êı²¿·Ö£¬³õÊ¼»¯Îª1£¬ºóĞø¸ù¾İĞ¡ÊıµãºóµÄÎ»Êı½øĞĞµ÷Õû
+
+    // Ìø¹ıÇ°ÃæµÄ¿Õ°××Ö·û£¨Èç¹ûÓĞ£©
+    while (i < len && isspace(ch[i])) {
+        i++;
+    }
+
+    // ÅĞ¶ÏÕı¸ººÅ
+    if (i < len && (ch[i] == '+' || ch[i] == '-')) {
+        sign = (ch[i++] == '+')? 1 : -1;
+    }
+
+    // ½âÎöÕûÊı²¿·Ö
+    while (i < len && isdigit(ch[i])) {
+        num = num * 10 + (ch[i++] - '0');
+    }
+
+    // ½âÎöĞ¡Êı²¿·Ö
+    if (i < len && ch[i] == '.') {
+        i++;
+        dot_count++;
+        while (i < len && isdigit(ch[i])) {
+            num = num * 10 + (ch[i++] - '0');
+            decimal *= 10;
+        }
+    }
+
+    // ¼ì²éĞ¡Êıµã³öÏÖ´ÎÊıÊÇ·ñºÏ·¨
+    if (dot_count > 1) {
+        printf("·Ç·¨µÄÊı×Ö¸ñÊ½\n");
+        exit(1);
+    }
+
+    return num * sign / decimal;
+}
+
+// Ö´ĞĞÁ½¸öÊıµÄÔËËã
+float calculate(float num1, char op, float num2) {
+    switch (op) {
+        case '+':
+            return num1 + num2;
+        case '-':
+            return num1 - num2;
+        case '*':
+            return num1 * num2;
+        case '/':
+            if (num2 == 0) {
+                printf("³ıÊı²»ÄÜÎª0\n");
+                exit(1);
+            }
+            return num1 / num2;
+        case '%':
+            if ((int)num2 == 0) {
+                printf("È¡ÓàÔËËã³ıÊı²»ÄÜÎª0\n");
+                exit(1);
+            }
+            return (int)num1 % (int)num2;
+        default:
+            printf("²»Ö§³ÖµÄÔËËã·û\n");
+            exit(1);
+    }
+}
+
+// ¼ÆËã±í´ïÊ½µÄÖµ
+// 1.2+3.4*5.6+7.8
+float evaluateExpression(char ch[]) {
+    int len = strlen(ch);
+    float result = getValue(ch, 0);
+    float num;
+    char op;
+    for (int i = 0; i < len; i++) {
+        if (ch[i] == '+' || ch[i] == '-' || ch[i] == '*' || ch[i] == '/' || ch[i] == '%') {
+            op = ch[i];
+            num = getValue(ch, i + 1);
+            result = calculate(result, op, num);
+        }
+    }
+    return result;
+}
+
+int main() {
+    char expression[100];
+    printf("ÇëÊäÈë±í´ïÊ½£º");
+    scanf("%s", expression);
+    float value = evaluateExpression(expression);
+    printf("±í´ïÊ½µÄÖµÎª£º%f\n", value);
+    return 0;
+}

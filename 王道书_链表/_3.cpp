@@ -1,12 +1,11 @@
-//链表的重复元素删除
 #include<iostream>
 using namespace std;
 typedef struct lnode{
     int data;
     struct lnode *next;
 }lnode,*linklist;
-int a[10]={1,2,3,5,6,6,7,7,9,10};
-int n=10;
+int a[5]={1,3,3,4,7};
+int n=5;
 void buildlist(linklist &L){
     L=(linklist)malloc(sizeof(lnode));
     lnode *s,*r=L;
@@ -26,25 +25,27 @@ void disp(linklist L){
     }
     cout<<endl;
 }
-void deletelist(linklist &L){
-    if(L->next==NULL) return;
-    lnode *p=L->next,*q;
-    while(p->next!=NULL){
-        q=p->next;
-        if(p->data==q->data){
-            p->next=q->next;
-            free(q);
+void divide_list(linklist &l){
+    lnode *l1=(lnode*)malloc(sizeof(lnode));
+    lnode *l2=(lnode*)malloc(sizeof(lnode));
+    lnode *p=l->next,*cur1=l1,*cur2=l2;
+    while(p) {
+        if (p->data % 2 == 0) {
+            cur2->next = p;
+            cur2 = cur2->next;
+        } else {
+            cur1->next = p;
+            cur1 = cur1->next;
         }
-        else p=p->next;
+        p = p->next;
     }
+    cur1->next=NULL;
+    cur2->next=NULL;
+    disp(l1);
+    disp(l2);
 }
 int main(){
-    linklist L;
-    buildlist(L);
-    cout<<"删除之前"<<endl;
-    disp(L);
-    deletelist(L);
-    cout<<"删除之后"<<endl;
-    disp(L);
-    return 0;
+    linklist l;
+    buildlist(l);
+    divide_list(l);
 }

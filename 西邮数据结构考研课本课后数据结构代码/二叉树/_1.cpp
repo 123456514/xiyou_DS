@@ -1,6 +1,7 @@
 #include<iostream>
 #include <stack>
 #include <queue>
+#include <math.h>
 
 using namespace std;
 typedef struct treenode{
@@ -92,7 +93,21 @@ int find_node_data_level_count(treenode * root,int h){
 // 2020 二叉树高度 重复 2014
 
 // 2021 判断二叉树是否是二叉排序树
-
+int preValue=INT_MIN;
+bool is_sort_tree(treenode *root){
+    if(root == NULL) return true;
+    preValue=INT_MIN;
+    bool isLeftBST= is_sort_tree(root->left);
+    if(!isLeftBST){
+        return false;
+    }
+    if(root->data>=preValue){
+        preValue=root->data;
+    }else{
+        return false;
+    }
+    return is_sort_tree(root->right);
+}
 // 2022 得到二叉树中一个数值为x的节点的双亲节点
 // 方法一: 不使用递归的方法，第一步把二叉树中的节点放到一个数组中，但是这里开辟多大的数组空间这里是不知道的
 treenode *find_parent_node_1(treenode * root,int x){
@@ -227,6 +242,97 @@ void levelOrderIterative(treenode * root){
         }
     }
 }
+// 求二叉树自下而上，从右向左的层次遍历 这里使用到栈
+void level_reverse(treenode *root){
+    if(root == NULL) return;
+    stack<treenode *>nodeStack;
+    queue<treenode *>nodeQueue;
+    nodeQueue.push(root);
+    nodeStack.push(root);
+    while(!nodeQueue.empty()){
+        int size=nodeQueue.size();
+        for(int i=0;i<size;i++){
+            treenode *node=nodeQueue.front();
+            nodeQueue.pop();
+            if(node->left) {
+                nodeQueue.push(node->left);
+                nodeStack.push(node->left);
+            }
+            if(node->right){
+                nodeQueue.push(node->right);
+                nodeStack.push(node->right);
+            }
+        }
+    }
+    while(!nodeStack.empty()){
+        treenode *node=nodeStack.top();
+        cout << node->data;
+        nodeStack.pop();
+    }
+}
+// 判断二叉树是否是一个完全二叉树 ,使用到队列
+bool is_all(treenode *root){
+    queue<treenode *>nodeQueue;
+    nodeQueue.push(root);
+    // 在这里不用判断node是否为空，把null填到队列中，在最终判断队列中是否有值，如果有值不为null，那么就不是完全二叉树
+    while(!nodeQueue.empty()){
+        treenode *node=nodeQueue.front();
+        nodeQueue.pop();
+        if(node!=NULL){
+            nodeQueue.push(node->left);
+            nodeQueue.push(node->right);
+        }else{
+            break;
+        }
+    }
+    // 如果队列中还存在不为null 的值，那么就不是完全二叉树
+    while(!nodeQueue.empty()){
+        if(nodeQueue.front() != NULL){
+            return false;
+        }
+    }
+    return true;
+}
+
+// 判断二叉树是否是一个平衡二叉树
+int getHeight(treenode *root){
+    if(root == NULL) return 0;
+    int leftHeight= getHeight(root->left);
+    int rightHeight= getHeight(root->right);
+    // 如果左子树和右子树高度之差的绝对值小于等于1，那么就是二叉平衡树
+    if(leftHeight>=0 && rightHeight >=0 && abs(leftHeight-rightHeight) <=1){
+        return max(leftHeight,rightHeight) + 1;
+    }else{
+        return -1;
+    }
+}
+bool isBalance(treenode *root){
+    return getHeight(root) > -1;
+}
+// 得到两个节点的最近公共祖先
+
+// 实现二叉树中所有节点的左右子树交换,二叉树翻转
+treenode* reverse(treenode *root){
+    if(root == NULL) return NULL;
+    treenode *left=reverse(root->left);
+    treenode *right=reverse(root->right);
+    root->left=right;
+    root->right=left;
+    return root;
+}
+
+// 得到先序序列中第k个节点
+treenode * get_node_k(treenode *root,int k){
+    if(root == NULL) return NULL;
+    if(k==0){
+        return root;
+    }
+    get_node_k(root->left,--k);
+    get_node_k(root->right,--k);
+    return NULL;
+}
+// 对树中每个数据域值为x 的节点，删除以它为根的子树，并释放对应的内存空间
+
 // 二叉树非递归先序遍历
 // 这里使用到栈
 void preOrderIterative(treenode * root){
@@ -290,7 +396,9 @@ void postOrderIterative(treenode * root){
 int main(){
     tree t;
     buildtree(t);
-    cout << find_node_data_level_count(t,2);
+    treenode *node = get_node_k(t,2);
+    // level_reverse(t);
+    // cout << find_node_data_level_count(t,2);
     // cout <<find_x_level(t,'B');
     // cout<<get_node_count_x(t,'E');
     return 0;
